@@ -22,11 +22,12 @@ parser.add_argument("--output_path", type=str, default=None, help="path to outpu
 parser.add_argument("--crop-seconds", type=int, default=None, help="crop midi to this many seconds")
 parser.add_argument("--device", type=str, default="cuda:0", help="device to run on")
 parser.add_argument("--pitch-correction", action="store_true", default=True, help="replace predicted pitch with midi pitch on active notes")
+parser.add_argument("--pitch-offset", type=int, default=0, help="pitch offset")
 parser.add_argument("--legato", action="store_true", default=False, help="use legato, otherwise forces staccato on subsequent notes on same string")
 
 args = parser.parse_args()
 
-midi_path = "test_midi/never_meant.mid"
+midi_path = args.midi_path
 
 ckpt = "checkpoints/unified.ckpt"
 os.makedirs("checkpoints", exist_ok=True)
@@ -45,6 +46,14 @@ model_ft_frame_rate = model.config["model_ft_frame_rate"]
 
 #%%
 pm = pretty_midi.PrettyMIDI(midi_path)
+
+if args.pitch_offset != 0:
+    for instrument in pm.instruments:
+        # Don't want to shift drum notes
+        if not instrument.is_drum:
+            for note in instrument.notes:
+                note.pitch += args.pitch_offset
+
 if args.crop_seconds is not None:
     pm = crop_pretty_midi(pm, args.crop_seconds)
 pm = remove_out_of_range_notes(pm)
