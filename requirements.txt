@@ -13,3 +13,4 @@ julius
 jupyter
 einops
 soundfile
+numpy==1.23
