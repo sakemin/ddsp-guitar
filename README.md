@@ -20,18 +20,53 @@ Listen to audio examples on our [project page](https://erl-j.github.io/neural-gu
 
 ## Installation
 
+### Option 1: Local Installation
+
 ```bash
 git clone https://github.com/sakemin/ddsp-guitar.git
 cd ddsp-guitar
 pip install -r requirements.txt
 ```
 
+### Option 2: Docker Installation
+
+```bash
+git clone https://github.com/sakemin/ddsp-guitar.git
+cd ddsp-guitar
+docker build -t ddsp-guitar .
+```
+
 ## Usage
+
+### Local Usage
 
 Render a MIDI file with the pretrained unified model:
 
 ```bash
 python render_midi.py --midi_path midi.mid --output_path out.wav
+```
+
+### Docker Usage
+
+To render a MIDI file using Docker, you can mount any directory containing your MIDI files and specify where to save the output:
+
+```bash
+# Basic usage with files in current directory
+docker run -v $(pwd):/data ddsp-guitar --midi_path /data/midi.mid --output_path /data/out.wav
+
+# Using custom paths
+docker run -v /path/to/your/midi/files:/data ddsp-guitar --midi_path /data/your_midi.mid --output_path /data/your_output.wav
+```
+
+The `-v` flag mounts a directory from your host system to `/data` in the container. Make sure to:
+1. Use absolute paths in the container (starting with `/data/`)
+2. Mount the directory containing your MIDI files
+3. The output WAV file will be saved in the same mounted directory
+
+For example, if your MIDI file is in `/home/user/music/input.mid` and you want to save the output to `/home/user/music/output.wav`:
+
+```bash
+docker run -v /home/user/music:/data ddsp-guitar --midi_path /data/input.mid --output_path /data/output.wav
 ```
 
 ### Command Line Options
