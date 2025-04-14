@@ -1,0 +1,26 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+joblib = "*"
+pretty-midi = "==0.2.9"
+wandb = "==0.12.9"
+protobuf = "==3.19.3"
+jams = "*"
+matplotlib = "*"
+librosa = "*"
+penn = "*"
+pytorch-lightning = "*"
+torchcrepe = "*"
+julius = "*"
+jupyter = "*"
+einops = "*"
+soundfile = "*"
+numpy = "==1.23"
+
+[dev-packages]
+
+[requires]
+python_version = "3.8"
